@@ -1,0 +1,174 @@
+
+import React from "react";
+import ReactDOM from "react-dom/client";
+
+/* =========================
+   RESUME HEADER
+   ========================= */
+
+class Resume_Header extends React.Component {
+  render() {
+    return (
+      <h1>Resume Details</h1>
+    );
+  }
+}
+
+
+/* =========================
+   PERSONAL INFORMATION
+   ========================= */
+
+class Resume_Person_Info extends React.Component {
+  render() {
+    return (
+      <div>
+        <div>
+          Name : <p>Prashanth K</p>
+        </div>
+
+        <div>
+          Address : <p>Kengeri</p>
+        </div>
+
+        <div>
+          Phone No : <p>1234567890</p>
+        </div>
+
+        <div>
+          Email id : <p>prashanthk@rvce.edu.in</p>
+        </div>
+      </div>
+    );
+  }
+}
+
+
+/* =========================
+   EDUCATION TABLE
+   ========================= */
+
+class EdTable extends React.Component {
+  render() {
+
+    const education = [
+      {
+        id: 1,
+        name: "National Public School",
+        place: "Bengaluru",
+        stddeg: "10th",
+        grade: "A+"
+      },
+
+      {
+        id: 2,
+        name: "Indian Institute of Science",
+        place: "Bengaluru",
+        stddeg: "Under Graduate",
+        grade: "9.8"
+      }
+    ];
+
+
+    const edudetails = education.map(educ =>
+      <EdRow
+        id={educ.id}
+        name={educ.name}
+        place={educ.place}
+        stddeg={educ.stddeg}
+        grade={educ.grade}
+      />
+    );
+
+
+    return (
+      <table border="1">
+
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>place</th>
+            <th>education</th>
+            <th>grade</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {edudetails}
+        </tbody>
+
+      </table>
+    );
+  }
+}
+
+
+/* =========================
+   EDUCATION ROW
+   ========================= */
+
+class EdRow extends React.Component {
+  render() {
+    return (
+      <tr>
+        <td>{this.props.id}</td>
+        <td>{this.props.name}</td>
+        <td>{this.props.place}</td>
+        <td>{this.props.stddeg}</td>
+        <td>{this.props.grade}</td>
+      </tr>
+    );
+  }
+}
+
+
+/* =========================
+   EDUCATION COMPONENT
+   ========================= */
+
+class Education extends React.Component {
+  render() {
+    return (
+      <section>
+        <EdTable />
+      </section>
+    );
+  }
+}
+
+
+/* =========================
+   MAIN APP
+   ========================= */
+
+class App extends React.Component {
+  render() {
+    return (
+      <div>
+
+        <Resume_Header />
+
+        <Resume_Person_Info />
+
+        <Education />
+
+      </div>
+    );
+  }
+}
+
+
+/* =========================
+   RENDER APPLICATION
+   ========================= */
+
+const root = ReactDOM.createRoot(
+  document.getElementById("root")
+);
+
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
