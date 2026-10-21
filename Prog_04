@@ -1,0 +1,185 @@
+Run this command:
+npx create-react-app program4
+
+
+Wait until the project is created. Then enter the project folder:
+cd program4
+
+
+Step 2: Open the project in VS Code
+If the project folder isn't already open, run:
+code .
+
+
+In the left Explorer panel, open the src folder.
+Step 3: Create Student.js
+Inside src, create a new file named Student.js.
+
+Copy and paste this complete code:
+
+import React from "react";
+
+// Initial student data
+const studlist = [
+  {
+    slno: 1,
+    name: "stud1",
+    usn: "rvce1",
+    tmarks: 150
+  },
+  {
+    slno: 2,
+    name: "stud2",
+    usn: "rvce2",
+    tmarks: 145
+  }
+];
+
+// Component 1: Display a single student
+class StudentRow extends React.Component {
+  render() {
+    const studl = this.props.stdli;
+
+    return (
+      <tr>
+        <td>{studl.slno}</td>
+        <td>{studl.name}</td>
+        <td>{studl.usn}</td>
+        <td>{studl.tmarks}</td>
+      </tr>
+    );
+  }
+}
+
+// Component 2: Display all students in a table
+class StudentsTable extends React.Component {
+  render() {
+    const studrows = this.props.studlist.map(studli => (
+      <StudentRow
+        key={studli.slno}
+        stdli={studli}
+      />
+    ));
+
+    return (
+      <table border="1" cellPadding="8">
+        <thead>
+          <tr>
+            <th>Sl No</th>
+            <th>Student Name</th>
+            <th>USN</th>
+            <th>Total Marks</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {studrows}
+        </tbody>
+      </table>
+    );
+  }
+}
+
+// Component 3: Manage the student list
+class StudentListTable extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      newStudList: []
+    };
+  }
+
+  componentDidMount() {
+    this.loadData();
+  }
+
+  // Load initial students after 1 second
+  loadData() {
+    setTimeout(() => {
+      this.setState({
+        newStudList: studlist
+      });
+    }, 1000);
+
+    // Add another student after 2 seconds
+    setTimeout(() => {
+      this.loadupdate();
+    }, 2000);
+  }
+
+  // Add the third student
+  loadupdate() {
+    const newstudlist1 = this.state.newStudList.slice();
+
+    const stud = {
+      slno: 3,
+      name: "rvce12",
+      usn: "rvce12",
+      tmarks: 250
+    };
+
+    newstudlist1.push(stud);
+
+    this.setState({
+      newStudList: newstudlist1
+    });
+  }
+
+  render() {
+    return (
+      <React.Fragment>
+        <h2>Student Registration Portal</h2>
+
+        <hr />
+
+        <StudentsTable
+          studlist={this.state.newStudList}
+        />
+
+        <hr />
+      </React.Fragment>
+    );
+  }
+}
+
+export default StudentListTable;
+
+
+
+Save the file using Ctrl + S.
+Step 4: Replace the code in App.js
+Inside the same src folder, open App.js.
+
+Delete the existing code and paste:
+
+import React from "react";
+import StudentListTable from "./Student";
+
+function App() {
+  return (
+    <div>
+      <StudentListTable />
+    </div>
+  );
+}
+
+export default App;
+
+
+
+Save using Ctrl + S.
+Step 5: Check index.js
+Open src/index.js. In the default Create React App project, it should already contain code that renders App using ReactDOM.createRoot.
+
+You generally don't need to change this file.
+Step 6: Execute the program
+Go to the VS Code terminal. Make sure you are inside the program4 folder.
+
+Run:
+npm start
+
+
+Wait for the application to compile. Your browser should open at:
+
+http://localhost:3000
