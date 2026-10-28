@@ -1,0 +1,125 @@
+
+npx create-react-app program5
+cd program5
+-------------------------------
+1) Registrationfrom.js
+import React from "react";
+
+class RegistrationForm extends React.Component {
+  state = {
+    name: "",
+    email: "",
+    password: "",
+    errors: {}
+  };
+
+  validate() {
+    const { name, email, password } = this.state;
+    const errors = {};
+
+    if (!name.trim()) {
+      errors.name = "Name is required";
+    } else if (name.trim().length < 3) {
+      errors.name = "Name must be at least 3 letters";
+    }
+
+    if (!email.trim()) {
+      errors.email = "Email is required";
+    } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+      errors.email = "Email is invalid";
+    }
+
+    if (!password) {
+      errors.password = "Password is required";
+    } else if (password.length < 8) {
+      errors.password = "Password must be at least 8 characters";
+    }
+
+    this.setState({ errors });
+    return Object.keys(errors).length === 0;
+  }
+
+  handleChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (this.validate()) {
+      alert("Form submitted successfully!");
+
+      this.setState({
+        name: "",
+        email: "",
+        password: "",
+        errors: {}
+      });
+    }
+  };
+
+  render() {
+    const { name, email, password, errors } = this.state;
+
+    return (
+      <div>
+        <h1>Registration form for USER Input:</h1>
+
+        <form onSubmit={this.handleSubmit}>
+          <input
+            name="name"
+            placeholder="Name"
+            value={name}
+            onChange={this.handleChange}
+          />
+          <div style={{ color: "red" }}>{errors.name}</div>
+
+          <input
+            name="email"
+            placeholder="Email"
+            value={email}
+            onChange={this.handleChange}
+          />
+          <div style={{ color: "red" }}>{errors.email}</div>
+
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={this.handleChange}
+          />
+          <div style={{ color: "red" }}>{errors.password}</div>
+
+          <button type="submit">Register</button>
+        </form>
+      </div>
+    );
+  }
+}
+
+export default RegistrationForm;
+
+------------------------------------
+2)App.js
+
+
+import React from "react";
+import RegistrationForm from "./RegistrationForm";
+
+function App() {
+  return (
+    <div>
+      <RegistrationForm />
+    </div>
+  );
+}
+
+export default App;
+
+-------------------------_--------
+
+npm start
+
