@@ -1,0 +1,293 @@
+3. Create project folder
+1. Open VS Code.
+2. Click File → Open Folder.
+3. Create or select the folder named:
+FSAD_01
+
+
+4. Open terminal
+In VS Code, click:
+
+Terminal → New Terminal
+
+Or press:
+Ctrl + `
+
+
+Make sure your terminal is inside FSAD_01.
+5. Initialize Node.js project
+Execute:
+npm init -y
+
+
+Purpose: Creates package.json to manage the Node.js project.
+6. Install Express
+Execute:
+npm install express
+
+
+Purpose: Installs Express.js to create and manage the server and APIs.
+7. Create JavaScript file
+In VS Code Explorer:
+1. Right-click FSAD_01.
+2. Select New File.
+3. Name it:
+server.js
+
+
+8. Write the program
+Paste the complete program below into server.js.
+
+const express = require('express');
+
+const app = express();
+const port = 3000;
+
+// Middleware to parse JSON
+app.use(express.json());
+
+// In-memory JSON data store
+let books = [
+    {
+        id: 1,
+        title: 'The Lord of the Rings',
+        author: 'J.R.R. Tolkien',
+        price: 25.00,
+        quantity: 10
+    },
+    {
+        id: 2,
+        title: 'Pride and Prejudice',
+        author: 'Jane Austen',
+        price: 15.50,
+        quantity: 5
+    },
+    {
+        id: 3,
+        title: 'To Kill a Mockingbird',
+        author: 'Harper Lee',
+        price: 10.00,
+        quantity: 7
+    }
+];
+
+// GET - Display all books
+app.get('/books', (req, res) => {
+    res.status(200).json(books);
+});
+
+// GET - Display book by ID
+app.get('/books/:id', (req, res) => {
+    const book = books.find(
+        b => b.id === parseInt(req.params.id)
+    );
+
+    if (book) {
+        res.status(200).json(book);
+    } else {
+        res.status(404).send('Book not found');
+    }
+});
+
+// POST - Add a new book
+app.post('/books', (req, res) => {
+    const newBook = {
+        id: books.length + 1,
+        title: req.body.title,
+        author: req.body.author,
+        price: req.body.price,
+        quantity: req.body.quantity
+    };
+
+    books.push(newBook);
+    res.status(201).json(newBook);
+});
+
+// PUT - Update book details
+app.put('/books/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const book = books.find(b => b.id === id);
+
+    if (!book) {
+        return res.status(404).json({
+            message: 'Book not found'
+        });
+    }
+
+    book.title = req.body.title ?? book.title;
+    book.author = req.body.author ?? book.author;
+    book.price = req.body.price ?? book.price;
+    book.quantity = req.body.quantity ?? book.quantity;
+
+    res.status(200).json(book);
+});
+
+// PATCH - Partial update
+app.patch('/books/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const book = books.find(b => b.id === id);
+
+    if (!book) {
+        return res.status(404).json({
+            message: 'Book not found'
+        });
+    }
+
+    Object.assign(book, req.body);
+    res.status(200).json(book);
+});
+
+// DELETE - Delete a book
+app.delete('/books/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const initialLength = books.length;
+
+    books = books.filter(book => book.id !== id);
+
+    if (books.length === initialLength) {
+        return res.status(404).json({
+            message: 'Book not found'
+        });
+    }
+
+    res.status(200).json({
+        message: 'Book deleted successfully'
+    });
+});
+
+// Start server
+app.listen(port, () => {
+    console.log(
+        `Server is running on http://localhost:${port}`
+    );
+});
+
+
+
+Save the file using:
+Ctrl + S
+
+
+9. Check project structure
+Your folder should look like this:
+FSAD_01
+│
+├── node_modules/
+│
+├── package.json
+│
+├── package-lock.json
+│
+└── server.js
+
+
+10. Execute the program
+Open VS Code terminal and execute:
+node server.js
+
+
+Expected output:
+Server is running on http://localhost:3000
+
+
+Server started successfully
+Keep the terminal open.
+
+11. Test the program using Postman
+Open Postman → New → HTTP Request.
+
+Use the following operations in order.
+Experiment 1: GET – Display all books
+- Method: GET
+- URL:
+http://localhost:3000/books
+
+
+- Click Send.
+
+Expected result: Displays all three books.
+Experiment 2: GET – Display one book
+- Method: GET
+- URL:
+http://localhost:3000/books/1
+
+
+- Click Send.
+
+Expected result: Displays book with ID 1.
+Experiment 3: POST – Add a new book
+- Method: POST
+- URL:
+http://localhost:3000/books
+
+
+Select Body → raw → JSON.
+
+Enter:
+{
+    "title": "Harry Potter",
+    "author": "J.K. Rowling",
+    "price": 20,
+    "quantity": 8
+}
+
+
+Click Send.
+
+Expected result:
+{
+    "id": 4,
+    "title": "Harry Potter",
+    "author": "J.K. Rowling",
+    "price": 20,
+    "quantity": 8
+}
+
+
+Experiment 4: PUT – Update book
+- Method: PUT
+- URL:
+http://localhost:3000/books/1
+
+
+Select Body → raw → JSON.
+
+Enter:
+{
+    "title": "Updated Book",
+    "author": "John",
+    "price": 50,
+    "quantity": 15
+}
+
+
+Click Send.
+
+Expected result: Book 1 gets updated.
+Experiment 5: PATCH – Update selected details
+- Method: PATCH
+- URL:
+http://localhost:3000/books/1
+
+
+Body → raw → JSON:
+{
+    "price": 100
+}
+
+
+Click Send.
+
+Expected result: Only the price changes.
+Experiment 6: DELETE – Delete book
+- Method: DELETE
+- URL:
+http://localhost:3000/books/1
+
+
+Click Send.
+
+Expected result:
+{
+    "message": "Book deleted successfully"
+}
