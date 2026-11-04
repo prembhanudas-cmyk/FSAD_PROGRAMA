@@ -193,8 +193,21 @@ Server is running on http://localhost:3000
 Server started successfully
 Keep the terminal open.
 
-11. Test the program using Postman
+11. Test the program using Postman(Download the postman extensions in Vs code )
 Open Postman → New → HTTP Request.
+Step 1: Install Postman extension in VS Code
+1. Open VS Code.
+2. Click the Extensions icon on the left sidebar.
+3. Search for Postman.
+4. Install the official Postman extension.
+5. Open the Postman extension from the sidebar and sign in if prompted.
+
+Step 2: Start your Node.js server
+Open VS Code terminal:
+node server.js
+Expected output:
+Server is running on http://localhost:3000
+Keep this terminal running.
 
 Use the following operations in order.
 Experiment 1: GET – Display all books
