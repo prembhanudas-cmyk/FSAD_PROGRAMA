@@ -1,0 +1,108 @@
+PROGRAM 08 – MongoDB Aggregation Pipeline and Text Search
+Follow these steps in order. Execute each command in MongoDB Shell (mongosh).
+Step 1: Open MongoDB
+Open Ubuntu Terminal:
+mongosh
+
+
+Step 2: Select Database
+use company
+
+
+Step 3: Insert Sample Catalog Records
+Copy and execute:
+db.catalog.insertMany([
+  {
+    item_id: "A001",
+    name: "Classic Leather Backpack",
+    description: "Durable leather backpack with multiple compartments, perfect for daily commute or light travel.",
+    tags: ["leather", "backpack", "travel", "work"],
+    price: 120,
+    in_stock: true
+  },
+  {
+    item_id: "A002",
+    name: "Ergonomic Office Chair",
+    description: "Adjustable office chair with lumbar support and breathable mesh, ideal for long working hours.",
+    tags: ["office", "chair", "ergonomic", "comfort"],
+    price: 280,
+    in_stock: false
+  },
+  {
+    item_id: "A003",
+    name: "Durable Cotton T-Shirt",
+    description: "A soft and durable t-shirt made from 100% organic cotton. Eco-friendly and comfortable.",
+    tags: ["cotton", "tshirt", "organic", "eco-friendly"],
+    price: 25,
+    in_stock: true
+  }
+]);
+
+
+Step 4: Verify Inserted Records
+db.catalog.find()
+
+
+Step 5: Create Text Index
+db.catalog.createIndex({
+  name: "text",
+  description: "text",
+  tags: "text"
+})
+
+
+Step 6: Execute Text Search Using Aggregation Pipeline
+db.catalog.aggregate([
+  {
+    $match: {
+      $text: {
+        $search: "durable backpack"
+      }
+    }
+  },
+  {
+    $project: {
+      _id: 0,
+      name: 1,
+      price: 1,
+      score: { $meta: "textScore" }
+    }
+  }
+])
+
+
+Step 7: Verify Search Results
+Expected matching records:
+- Classic Leather Backpack
+- Durable Cotton T-Shirt
+Step 8: Execute Another Text Search (Optional)
+Search for office:
+db.catalog.aggregate([
+  {
+    $match: {
+      $text: {
+        $search: "office"
+      }
+    }
+  },
+  {
+    $project: {
+      _id: 0,
+      name: 1,
+      price: 1,
+      score: { $meta: "textScore" }
+    }
+  }
+])
+
+
+Step 9: Verify Collection Records
+db.catalog.countDocuments()
+
+
+Expected output:
+3
+
+
+Step 10: Exit MongoDB
+exit
