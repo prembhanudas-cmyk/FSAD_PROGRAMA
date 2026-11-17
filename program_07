@@ -1,0 +1,192 @@
+PROGRAM 07: MongoDB Comparison Selectors and Logical Selectors for Company Database
+MS Word-compatible practical record • Copy and paste directly into Word
+1. Open MongoDB Shell
+Open Ubuntu Terminal and execute:
+mongosh
+
+
+2. Create Database
+use company
+
+
+3. Create Employees Collection
+db.createCollection("employees")
+
+
+4. Insert 160 Unique Employee Records Using Loop
+Copy and execute the complete code:
+use company
+
+db.employees.deleteMany({})
+
+let employees = [
+  {
+    employee_id: 101,
+    name: "Sonia Rao",
+    department: "Engineering",
+    salary: 95000,
+    hire_date: new Date("2023-01-15"),
+    performance_score: 4.5,
+    status: "Active"
+  },
+  {
+    employee_id: 102,
+    name: "Rajesh Kumar",
+    department: "HR",
+    salary: 68000,
+    hire_date: new Date("2024-03-22"),
+    performance_score: 4.1,
+    status: "Active"
+  },
+  {
+    employee_id: 103,
+    name: "Arjun Singh",
+    department: "Engineering",
+    salary: 120000,
+    hire_date: new Date("2022-06-01"),
+    performance_score: 4.8,
+    status: "Active"
+  },
+  {
+    employee_id: 104,
+    name: "Priya Mehta",
+    department: "Sales",
+    salary: 85000,
+    hire_date: new Date("2023-11-10"),
+    performance_score: 4.2,
+    status: "Active"
+  },
+  {
+    employee_id: 105,
+    name: "Vikram Reddy",
+    department: "Sales",
+    salary: 85000,
+    hire_date: new Date("2024-08-01"),
+    status: "On Leave"
+  }
+];
+
+let departments = [
+  "Engineering", "HR", "Sales",
+  "Finance", "Marketing", "IT"
+];
+
+let statuses = [
+  "Active", "On Leave", "Inactive"
+];
+
+for (let i = 6; i <= 160; i++) {
+  employees.push({
+    employee_id: 100 + i,
+    name: "Employee " + String(i).padStart(3, "0"),
+    department: departments[i % departments.length],
+    salary: 45000 + (i * 1375) % 90000,
+    hire_date: new Date(2020, i % 12, (i % 28) + 1),
+    performance_score: Math.round(
+      (3 + (i % 21) * 0.1) * 10
+    ) / 10,
+    status: statuses[i % statuses.length]
+  });
+}
+
+db.employees.insertMany(employees);
+
+print("Total Employees: " + db.employees.countDocuments());
+
+
+5. Verify Inserted Records
+db.employees.countDocuments()
+
+
+db.employees.find().limit(5)
+
+
+6. Comparison Selectors
+A. Greater Than ($gt) and Less Than or Equal ($lte)
+db.employees.find({
+  salary: {
+    $gt: 90000,
+    $lte: 120000
+  }
+})
+
+
+B. In ($in)
+db.employees.find({
+  department: {
+    $in: ["HR", "Sales"]
+  }
+})
+
+
+C. Not Equal ($ne)
+db.employees.find({
+  status: {
+    $ne: "On Leave"
+  }
+})
+
+
+7. Logical Selectors
+A. AND ($and)
+db.employees.find({
+  department: "Engineering",
+  performance_score: {
+    $gte: 4.5
+  }
+})
+
+
+B. OR ($or)
+db.employees.find({
+  $or: [
+    { department: "HR" },
+    { salary: { $gt: 100000 } }
+  ]
+})
+
+
+8. Combining Selectors for a Complex Query
+db.employees.find({
+  status: "Active",
+  department: {
+    $in: ["Engineering", "Sales"]
+  },
+  hire_date: {
+    $lt: new Date("2024-01-01")
+  }
+})
+
+
+9. Final Verification Commands
+Execute the following commands:
+db.employees.countDocuments()
+
+db.employees.countDocuments({
+  status: "Active"
+})
+
+db.employees.countDocuments({
+  department: "Engineering"
+})
+
+db.employees.countDocuments({
+  department: "HR"
+})
+
+db.employees.countDocuments({
+  department: "Sales"
+})
+
+db.employees.find(
+  {},
+  {
+    _id: 0,
+    name: 1,
+    salary: 1
+  }
+)
+
+
+10. Exit MongoDB Shell
+exit
